@@ -2,23 +2,21 @@ const App = {
     el: '#list',
     data() {
         return {
+            newItem: '',
             items: [
-                {
-                    text: 'Learn vue'
-                },
-                {
-                    text: 'add text'
-                }
+                { text: 'Learn vue' },
+                { text: 'add text' }
             ]
 
         }
     },
     methods: {
         addItem() {
-            this.items.push({ text: this.item })
+            this.items.push({ text: this.newItem })
+            this.newItem = ''
         },
-        deleteItem(event) {
-            this.items.splice(this.items.indexOf(event), 1);
+        deleteItem(item) {
+            this.items = this.items.filter((list) => list !== item)
         }
     }
 }
