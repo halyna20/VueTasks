@@ -10,26 +10,33 @@
 
 <body>
     <div id="app">
-        <form>
-            <label>First name:</label>
-            <input type="text" required>
-            <label>Last name:</label>
-            <input type="text" required>
+        <v-form @submit.prevent="onSubmit">
+            <label for="name">First name:</label>
+            <input type="text" id="name" name="name" rules="required">
+            <error-message name="name"></error-message><br>
+            <label for="surname">Last name:</label>
+            <input type="text" id="surname" required>
 
-            <input type="radio" id="women">
-            <label for="women">Women</label>
-            <input type="radio" id="men">
-            <label for="men">Men</label>
+            <input type="radio" id="woman">
+            <label for="woman">Woman</label>
+            <input type="radio" id="man">
+            <label for="man">Man</label>
 
-            <input type="tel">
-            <input type="text">
+            <label for="phone">Phone number: </label>
+            <input type="tel" id="phone">
+            <label for="nickname">Nickname:</label>
+            <input type="text" id="nickname">
 
             <button>Ok</button>
-        </form>
+        </v-form>
+
     </div>
 
 
     <script src="https://cdn.jsdelivr.net/npm/vue@next"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vee-validate@latest/dist/vee-validate.js"></script>
+    <script src="https://unpkg.com/@vee-validate/rules@next"></script>
+    <script src="https://unpkg.com/@vee-validate/i18n@next"></script>
     <script src="app.js"></script>
 </body>
 
