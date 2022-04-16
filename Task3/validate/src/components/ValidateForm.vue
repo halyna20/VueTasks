@@ -1,55 +1,66 @@
 <template>
     
-    <div :style="{ background }">
+    <div :style="{ background }" class="container">
         <form @submit.prevent="onSubmit">
-            <label for="name">First name:</label>
-            <input type="text" id="name" name="name" v-model="name">
-            <span> {{ nameError }}</span>
+                <label for="name">First name:</label>
+                <input type="text" id="name" name="name" v-model="name">
+                <span class="error"> {{ nameError }}</span>
+                <br/>
+                <label for="surname">Last name:</label>
+                <input type="text" id="surname" name="surname" v-model="surname"/>
+                <span class="error"> {{ surnameError }}</span>
+                <br/>
+                
+                <input type="radio" id="woman" value="woman" @change="check" v-model="picked" name="picked" >
+                <label for="woman">Woman</label>
 
-            <label for="surname">Last name:</label>
-            <input type="text" id="surname" name="surname" v-model="surname"/>
-            <span> {{ surnameError }}</span>
+                <input type="radio" id="man" value="man" @change="check" v-model="picked" name="picked" >
+                <label for="man">Man</label>
+                <br/>
 
-            
-            <input type="radio" id="woman" value="woman" @change="check" v-model="picked" name="gender">
-            <label for="woman">Woman</label>
+                <label for="phone">Phone number: </label>
+                <input type="tel" id="phone" name="phone" v-model="phone">
+                <span class="error"> {{ phoneError }}</span>
+                <br/>
 
-            <input type="radio" id="man" value="man" @change="check" v-model="picked" name="gender">
-            <label for="man">Man</label>
-            
-
-            <label for="phone">Phone number: </label>
-            <input type="tel" id="phone" name="phone" v-model="phone">
-            <span> {{ phoneError }}</span>
-            <label for="nickname">Nickname:</label>
-            <input type="text" id="nickname" name="nickname" v-model="nickname">
-            <span> {{ nicknameError }}</span>
-
-            <button>Ok</button>
+                <label for="nickname">Nickname:</label>
+                <input type="text" id="nickname" name="nickname" v-model="nickname">
+                <span class="error"> {{ nicknameError }}</span>
+                <br/>
+                <button type="submit" :disabled="!meta.valid">Ok</button>
         </form>
     </div>
 </template>
 
 <script>
-    import { useField } from 'vee-validate';
+    import { useField, useForm, useFieldValue } from 'vee-validate';
+    
 
     export default {
         name: 'ValidateForm',
         setup() {
+            const { meta } = useForm({
+                initialValues: {
+                    name: '',
+                    surname: '',
+                    phone: '',
+                    picked: '',
+                    nickname: ''
+                }
+            });
+
             function onSubmit() {
                 alert('submited')
             }
-            const name = useField('name', function(value) {
-                if(!value) return 'This field is required'
 
-                return true
-            })
+            const isRequired = value => (value ? true : 'This field is required');
 
-            const surname = useField('surname', function(value) {
-                if(!value) return 'This field is required'
+            const name = useField('name', isRequired)
 
-                return true
-            })
+            const surname = useField('surname', isRequired)
+            
+            const currentValue = useFieldValue('picked');
+            console.log(currentValue.value);
 
             const phone = useField('phone', function(value) {
                 if(!value) return 'This field is required'
@@ -74,6 +85,7 @@
             })
 
             return {
+                meta,
                 onSubmit,
                 name: name.value,
                 nameError: name.errorMessage,
@@ -92,14 +104,6 @@
             }
         },
         methods: {
-            isRequired(value) {
-                if (!value) {
-                    return 'This field is required';
-                }
-                
-                return true;
-            },
-
             check() {
                 if(this.picked === 'woman') {
                     this.background = 'pink'
